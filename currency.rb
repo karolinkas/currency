@@ -1,6 +1,6 @@
 class Calculator
 
-		TO_EURO = {
+	TO_EURO = {
     usd: 0.77818,
     gbp: 1.27341,
     cad: 0.70518,
@@ -16,44 +16,44 @@ class Calculator
     sek: 9.65400
   }
 	
-	def calculate_to_euro(amount,from,to=0.77818)
-		
-		result=amount*TO_EURO[from]
-
+	def convert(amount,from, to)
+		return amount * TO_EURO[from] if to == :eur
+    return amount * FROM_EURO[to] if from == :eur
 	end
-
-
-
-
+  
 end
-
-
-
 
 
 describe Calculator do 
 	before do 
     @super_calculator = Calculator.new
+    @currency = :eur
   end
 
-	describe :calculate_to_euro do
-		it "should return the value in dollars" do
-			@super_calculator.calculate_to_euro(1,:usd,:eur).should==0.77818
+	describe :convert do
+		it "should return the value in canadian dollars" do
+			@super_calculator.convert(10, :cad, @currency).should == 10 * 0.70518
 		end
 
-    it "should convert swedish kr to euro" do
-      @super_calculator.calculate_to_euro(100,:sek,:eur).should == 10
+    it "should return the value in euro if canadian dollars" do
+      @super_calculator.convert(10, @currency, :cad).should == 10 * 1.41613
     end
 
-		it "should return the value in dollars for the amount of 100" do
-			@super_calculator.calculate_to_euro(100,:usd,:eur).should==77.818
-		end
+  #   it "should convert swedish kr to euro" do
+  #     @super_calculator.convert(100, :sek).should == 10
+  #   end
 
-		it "should return the value in dollars for the amount of 100" do
-			@super_calculator.calculate_from_euro(100,:eur,:usd).should==128.356
-		end
+		# it "should return the value in dollars for the amount of 100" do
+		# 	@super_calculator.convert(100, :usd).should==77.818
+		# end
 
-
+		# it "should return the value in dollars for the amount of 100" do
+		# 	@super_calculator.convert(100, :usd).should==128.356
+		# end
+  
+  #   it "should return the value in SEK for the amount of 100" do
+  #     @super_calculator.convert(100, :sek).should == 965.400
+  #   end
 	end
 end
 
